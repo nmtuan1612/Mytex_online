@@ -1,0 +1,36 @@
+{
+  "name": "latex-to-pdf-app",
+  "version": "3.1.0",
+  "description": "A simple latex to PDF appication.",
+  "main": "src/with-cls/index.js",
+  "types": "./index.d.ts",
+  "author": "Nguyen Manh Hung, Nguyen Manh Tuan",
+  "scripts": {
+    "start": "nodemon examples/with-cls/index.js",
+    "lint": "blyss | snazzy",
+    "fix": "blyss --fix",
+    "test": "npm run --silent lint"
+  },
+  "dependencies": {
+    "@types/node": "^11.12.0",
+    "buffer": "^6.0.3",
+    "express": "^4.17.2",
+    "express-handlebars": "^6.0.2",
+    "fs-extra": "^2.0.0",
+    "git": "^0.1.5",
+    "string-to-stream": "^1.1.0",
+    "temp": "^0.8.3",
+    "through2": "^2.0.3"
+  },
+  "devDependencies": {
+    "blyss": "^2.0.0",
+    "nodemon": "^2.0.15",
+    "snazzy": "^6.0.0"
+  },
+  "keywords": [
+    "latex",
+    "pdflatex",
+    "xetex",
+    "pdf"
+  ]
+}

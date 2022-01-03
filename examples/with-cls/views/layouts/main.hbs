@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latex to PDF</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    {{!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> --}}
+    <style>
+        * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+        }
+
+        body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-family: sans-serif;
+        color: black;
+        overflow: hidden;
+        }
+
+        .app {
+        display: flex;
+        }
+
+        #editor {
+        min-width: 650px;
+        height: 75vh;
+        border: 1px solid #ccc;
+        border-radius: 2px;
+        }
+
+        #state{
+        margin-top: 12px;
+        font-size: 1.2rem;
+        text-align: center;
+        }
+
+        .download{
+        margin-top: 12px;
+        font-size: 1.6rem;
+        text-align: center;
+        color: green;
+        text-decoration: underline;
+        }
+
+        .download:hover {
+            opacity: 0.8;
+            cursor: pointer;
+        }
+
+        #answer {
+        min-width: 650px;
+        height: 75vh;
+        border: 1px solid #ccc;
+        border-radius: 2px;
+        }
+
+        h1 {
+        font-size: 2.8rem;
+        font-weight: bold;
+        margin-top: 20px;
+        color: green;
+        }
+
+        h3{
+            margin-top: 40px;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 1rem;
+            color: black;
+        }
+
+        .footer b {
+            color: green;
+            font-size: 1.2rem;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    
+    {{{body}}}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.13/ace.min.js" type="text/javascript" charset="utf-8" ></script>
+    <script src="/jquery-3.6.0.min.js"></script>
+    <script src="/texteditor.js"></script> 
+    <script>
+        window.onload = function () {
+            codeEditor()
+        }
+    </script>
+</body>
+</html>

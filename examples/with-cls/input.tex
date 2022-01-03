@@ -1,0 +1,22 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[top=1.5cm, bottom=1.5cm, left=2.0cm, right=1.5cm] {geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{tkz-euclide}
+\usepackage{tikz,tkz-tab}
+\usepackage[loigiai]{ex_test}
+\def\colorEX{\color{purple}}
+\renewtheorem{ex}{\color{violet}Câu}
+\begin{document}
+	\begin{center}
+		\textbf{SOẠN THẢO CÂU TRẮC NGHIỆM }
+	\end{center}
+	\Opensolutionfile{ans}[ans/ans192]
+	\input{data/hamso}
+	\Closesolutionfile{ans}
+	\begin{center}
+		\textbf{ĐÁP ÁN CÂU TRẮC NGHIỆM}
+	\end{center}
+	\begin{multicols}{10}
+		\input{ans/ans192}
+	\end{multicols}
+\end{document}

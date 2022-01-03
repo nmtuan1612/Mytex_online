@@ -1,0 +1,438 @@
+\ProvidesPackage{ex_test}[2017/08/05 for Ex_test version 2.2.3, Tran Anh Tuan]
+\RequirePackage{ifthen}
+\RequirePackage{fancyhdr}
+\RequirePackage{multicol}
+\RequirePackage{answers}
+\RequirePackage{array}
+\RequirePackage{multirow}
+\RequirePackage{longtable}
+\RequirePackage[utf8]{vietnam}
+\RequirePackage{tikz}
+\RequirePackage{ntheorem}
+\RequirePackage{calc}
+\RequirePackage{etoolbox}
+\RequirePackage{probsoln}
+\RequirePackage{picinpar}
+%Dấu chấm, phảy sau mỗi phương án
+\def\dotEX{.}
+%Tương thích gói picinpar
+\def\picinpar{\setlength{\textwidth}{\textwidth}}
+\AtBeginEnvironment{window}{\def\picinpar{\setlength{\textwidth}{\textwidth-\picwd-\lwindowsep-2\fboxsep}}}
+%Tùy chọn lời giải
+\newcommand{\choicew}[1]{\setlength{\widthch}{#1}}
+\newcommand{\loigiai}[1]{\begin{onlysolution}#1\end{onlysolution}}
+\def\colorEX{\color{red}}
+\newcounter{numTrue}
+\newcounter{numTrueSol}
+\DeclareOption{loigiai}{
+\def\True{\colorEX\setcounter{numTrue}{\thedapan}\setcounter{numTrueSol}{\thedapan}}
+\def\loigiaiEX{\color{blue} Lời giải.}
+\showanswers
+%Xuất hiện chữ Lời giải trong môi trường onlysolution
+\makeatletter
+\renewenvironment{onlysolution}{%
+\long@collect@body\do@onlysolution
+\par\noindent\textbf{\loigiaiEX }
+\ifnum\the\value{numTrueSol}=1
+Chọn đáp án \circled{A}\newline
+\fi
+\ifnum\the\value{numTrueSol}=2
+Chọn đáp án \circled{B}\newline
+\fi
+\ifnum\the\value{numTrueSol}=3
+Chọn đáp án \circled{C}\newline
+\fi
+\ifnum\the\value{numTrueSol}=4
+Chọn đáp án \circled{D}\newline
+\fi
+\setcounter{numTrueSol}{0}
+}{}
+}
+\DeclareOption{color}{
+\def\True{\colorEX\setcounter{numTrue}{\thedapan}\setcounter{numTrueSol}{\thedapan}} 
+}
+\DeclareOption{book}{
+\def\loigiaiEX{\color{blue} Lời giải.}
+\showanswers
+\makeatletter
+\renewenvironment{onlysolution}{%
+\long@collect@body\do@onlysolution
+\par\noindent\textbf{\loigiaiEX }
+}{}
+\renewcommand{\loigiai}[1]{
+\ifnum\the\value{numTrueSol}=1
+\scantokens{
+\begin{solbook}
+Chọn đáp án \circled{A}\newline
+#1
+\end{solbook}}
+\fi
+\ifnum\the\value{numTrueSol}=2
+\scantokens{
+\begin{solbook}
+Chọn đáp án \circled{B}\newline
+#1
+\end{solbook}}
+\fi
+\ifnum\the\value{numTrueSol}=3
+\scantokens{
+\begin{solbook}
+Chọn đáp án \circled{C}\newline
+#1
+\end{solbook}}
+\fi
+\ifnum\the\value{numTrueSol}=4
+\scantokens{
+\begin{solbook}
+Chọn đáp án \circled{D}\newline
+#1
+\end{solbook}}
+\fi
+\setcounter{numTrueSol}{0}
+}
+\def\True{\setcounter{numTrue}{\thedapan}\setcounter{numTrueSol}{\thedapan}} 
+}
+\DeclareOption{dethi}{
+\def\True{\setcounter{numTrue}{\thedapan}\setcounter{numTrueSol}{\thedapan}} 
+}
+\ExecuteOptions{dethi}
+\ProcessOptions
+%Nội dung gói ex_test
+\theorempreskipamount0.1\baselineskip
+\theorempostskipamount0.2\baselineskip
+\newlength\dorongfix
+\dorongfix=\textwidth
+\newlength\dorong
+\dorong=\textwidth
+\theoremseparator{.}
+\theorembodyfont{\rm}
+\Newassociation{solbook}{Solbook}{ansbook}
+\renewcommand{\Solbooklabel}[1]{\textbf{Câu #1.}}
+\Newassociation{solEX}{Solution}{ans}
+\Newassociation{sol}{Solution}{ans_old}
+\newtheorem{ex}{Câu}
+\AtBeginEnvironment{ex}{\setcounter{numTrueSol}{0}\def\dotEX{.}}
+\AtEndEnvironment{ex}{
+\ifnum\the\value{numTrue}=1
+\scantokens{\begin{solEX}A\end{solEX}}
+\fi
+\ifnum\the\value{numTrue}=2
+\scantokens{\begin{solEX}B\end{solEX}}
+\fi
+\ifnum\the\value{numTrue}=3
+\scantokens{\begin{solEX}C\end{solEX}}
+\fi
+\ifnum\the\value{numTrue}=4
+\scantokens{\begin{solEX}D\end{solEX}}
+\fi
+\setcounter{numTrue}{0}
+\setcounter{numTrueSol}{0}
+}
+\newtheorem{vdex}{Ví dụ}
+\AtBeginEnvironment{vdex}{\setcounter{numTrueSol}{0}\def\dotEX{.}}
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+            \node[shape=circle,draw,inner sep=2pt] (char) {#1};}}
+\newcounter{dapan}
+\newcommand{\dapan}{\stepcounter{dapan}{\textbf{\Alph{dapan}.}}}
+%\newcommand{\dapan}{\stepcounter{dapan}{\circled{\Alph{dapan}}}}%Đáp án khoanh tròn
+% \newcommand{\dapan}{\stepcounter{dapan}{\textbf{\color{mau}\Alph{dapan}.}}} %Tô màu đáp án
+\newcommand{\boncot}[4]{
+\picinpar
+\setlength{\dorong}{(\textwidth-0.02\dorongfix)/4-\fboxsep}
+\par\setcounter{dapan}{0}
+\noindent\hspace{0.02\dorongfix}\begin{minipage}[t]{\dorong}
+\leavevmode\dapan\ #1\dotEX
+\end{minipage}
+\noindent\begin{minipage}[t]{\dorong}
+\leavevmode\dapan\ #2\dotEX
+\end{minipage}
+\noindent\begin{minipage}[t]{\dorong}
+\leavevmode\dapan\ #3\dotEX
+\end{minipage}
+\noindent\begin{minipage}[t]{\dorong}
+\leavevmode\dapan\ #4\dotEX
+\end{minipage}
+
+}
+\newcommand{\haicot}[4]{
+\picinpar
+\setlength{\dorong}{0.5\textwidth-0.01\dorongfix-\fboxsep}
+\setcounter{dapan}{0}
+\par\noindent\hspace{0.02\dorongfix}\begin{minipage}[t]{\dorong}
+\leavevmode\dapan\ #1\dotEX
+\end{minipage}
+\noindent\begin{minipage}[t]{\dorong}
+\leavevmode\dapan\ #2\dotEX
+\end{minipage}
+\par\noindent\hspace{0.02\dorongfix}\begin{minipage}[t]{\dorong}
+\leavevmode\dapan\ #3\dotEX
+\end{minipage}
+\noindent\begin{minipage}[t]{\dorong}
+\leavevmode\dapan\ #4\dotEX
+\end{minipage}
+
+}
+\newcommand{\motcot}[4]{
+\picinpar
+\setlength{\dorong}{\textwidth-0.02\dorongfix}
+\par\setcounter{dapan}{0}
+\noindent\hspace{0.02\dorongfix}\begin{minipage}[t]{\dorong}
+\strut\leavevmode\dapan\ #1\dotEX\strut
+\end{minipage}
+
+\noindent\hspace{0.02\dorongfix}\begin{minipage}[t]{\dorong}
+\strut\leavevmode\dapan\ #2\dotEX\strut
+\end{minipage}
+
+\noindent\hspace{0.02\dorongfix}\begin{minipage}[t]{\dorong}
+\strut\leavevmode\dapan\ #3\dotEX\strut
+\end{minipage}
+
+\noindent\hspace{0.02\dorongfix}\begin{minipage}[t]{\dorong}
+\strut\leavevmode\dapan\ #4\dotEX\strut
+\end{minipage}
+
+}
+\newcommand{\kboncot}[4]{
+\picinpar
+\setlength{\dorong}{(\textwidth-0.02\dorongfix)/4-\fboxsep}
+\par\setcounter{dapan}{0}
+\noindent\hspace{0.02\dorongfix}\begin{minipage}[t]{\dorong}
+\leavevmode\dapan\ #1\dotEX
+\end{minipage}
+\noindent\begin{minipage}[t]{\dorong}
+\leavevmode\dapan\ #2\dotEX
+\end{minipage}
+\noindent\begin{minipage}[t]{\dorong}
+\leavevmode\dapan\ #3\dotEX
+\end{minipage}
+\noindent\begin{minipage}[t]{\dorong}
+\leavevmode\dapan\ #4\dotEX
+\end{minipage}
+
+}
+\newcommand{\khaicot}[4]{
+\picinpar
+\setlength{\dorong}{0.5\textwidth-0.01\dorongfix-0.5\fboxsep}
+\setcounter{dapan}{0}
+\par\noindent\hspace{0.02\dorongfix}\begin{minipage}[t]{\dorong}
+\leavevmode\dapan\ #1\dotEX
+\end{minipage}
+\noindent\begin{minipage}[t]{\dorong}
+\leavevmode\dapan\ #2\dotEX
+\end{minipage}
+\par\noindent\hspace{0.02\dorongfix}\begin{minipage}[t]{\dorong}
+\leavevmode\dapan\ #3\dotEX
+\end{minipage}
+\noindent\begin{minipage}[t]{\dorong}
+\leavevmode\dapan\ #4\dotEX
+\end{minipage}
+
+}
+\newcommand{\kmotcot}[4]{
+\picinpar
+\setlength{\dorong}{\textwidth-0.02\dorongfix}
+\par\setcounter{dapan}{0}
+\noindent\hspace{0.02\dorongfix}\begin{minipage}[t]{\dorong}
+\strut\leavevmode\dapan\ #1\dotEX\strut
+\end{minipage}
+
+\noindent\hspace{0.02\dorongfix}\begin{minipage}[t]{\dorong}
+\strut\leavevmode\dapan\ #2\dotEX\strut
+\end{minipage}
+
+\noindent\hspace{0.02\dorongfix}\begin{minipage}[t]{\dorong}
+\strut\leavevmode\dapan\ #3\dotEX\strut
+\end{minipage}
+
+\noindent\hspace{0.02\dorongfix}\begin{minipage}[t]{\dorong}
+\strut\leavevmode\dapan\ #4\dotEX\strut
+\end{minipage}
+
+}
+%%%%%%%Tự động chọn \motcot, \haicot, \boncot
+      \newlength\widthcha
+        \newlength\widthchb
+        \newlength\widthchc
+        \newlength\widthchd
+        \newlength\widthch
+        \newlength\tabmaxwidth
+        \newlength\fourthtabwidth
+        \newlength\halftabwidth
+      \newcommand{\choice}[4]{%
+       \setlength\tabmaxwidth{\textwidth-\picwd-\lwindowsep}
+        \setlength\fourthtabwidth{0.25\textwidth-0.25\picwd-0.25\lwindowsep}
+        \setlength\halftabwidth{0.5\textwidth-0.5\picwd-0.5\lwindowsep}
+      \settowidth\widthcha{AM.#1}
+      \ifdim\widthch<\widthcha\relax\setlength{\widthch}{\widthcha}\fi%
+      \settowidth\widthchb{BM.#2}%
+      \ifdim\widthch<\widthchb\relax\setlength{\widthch}{\widthchb}\fi%
+      \settowidth\widthchc{CM.#3}%
+      \ifdim\widthch<\widthchc\relax\setlength{\widthch}{\widthchc}\fi%
+      \settowidth\widthchd{DM.#4}%
+      \ifdim\widthch<\widthchd\relax\setlength{\widthch}{\widthchd}\fi%
+      \ifdim\widthch<\fourthtabwidth
+        \boncot{#1}{#2}{#3}{#4}
+      \else\ifdim\widthch<\halftabwidth
+          \haicot{#1}{#2}{#3}{#4}
+        \else
+          \motcot{#1}{#2}{#3}{#4}
+      \fi\fi
+    }
+      \newcommand{\choicefix}[4]{%
+       \setlength\tabmaxwidth{\textwidth-\picwd-\lwindowsep}
+        \setlength\fourthtabwidth{0.25\textwidth-0.25\picwd-0.25\lwindowsep}
+        \setlength\halftabwidth{0.5\textwidth-0.5\picwd-0.5\lwindowsep}
+      \settowidth\widthcha{AM.#1}
+      \ifdim\widthch<\widthcha\relax\setlength{\widthch}{\widthcha}\fi%
+      \settowidth\widthchb{BM.#2}%
+      \ifdim\widthch<\widthchb\relax\setlength{\widthch}{\widthchb}\fi%
+      \settowidth\widthchc{CM.#3}%
+      \ifdim\widthch<\widthchc\relax\setlength{\widthch}{\widthchc}\fi%
+      \settowidth\widthchd{DM.#4}%
+      \ifdim\widthch<\widthchd\relax\setlength{\widthch}{\widthchd}\fi%
+      \ifdim\widthch<\fourthtabwidth
+        \boncot{#1}{#2}{#3}{#4}
+      \else\ifdim\widthch<\halftabwidth
+          \haicot{#1}{#2}{#3}{#4}
+        \else
+          \motcot{#1}{#2}{#3}{#4}
+      \fi\fi
+    }
+%Các phương pháp đưa hình vào văn bản
+\def\numpicinpar{0}
+\newdimen\widthimmini
+\newbox\imbox
+\newcommand{\IMleftright}[2]{
+\ \newline
+\begin{minipage}[h]{\textwidth-\widthimmini-\fboxsep}
+#1
+\end{minipage}
+\begin{minipage}[h]{\widthimmini}
+#2
+\end{minipage}
+}
+\newcommand{\immini}[2]{
+\setbox\imbox=\vbox{\hbox{#2}}
+\widthimmini=\wd\imbox
+\IMleftright{#1}{#2}
+}
+\newcommand{\impicinpar}[2]{
+\begin{window}[\numpicinpar,r,{
+#2
+}, {}]
+\begin{flushleft}
+#1
+\end{flushleft}
+\end{window}
+}
+%Hết cách đưa hình vào văn bản
+% Biểu diễn khoảng, đoạn trên trục số
+\usetikzlibrary{decorations.pathreplacing,decorations.markings,patterns}
+\def\colorInterval{black}
+\def\skipInterval{0.4cm}
+\newcommand{\Interval}[4]{%
+        \coordinate [label={center:$#1$},label=below:$\rule{0pt}{\skipInterval}#2$] (a) at (#2,0); 
+        \coordinate [label={center:$#3$},label=below:$\rule{0pt}{\skipInterval}#4$] (b) at (#4,0); 
+        \draw[color=\colorInterval] decorate[decoration={ticks,amplitude=3pt,segment length=1mm}] {(a)--(b)};
+}
+\newcommand{\IntervalR}[4]{%
+        \coordinate [label={center:$#1$},label=below:$\rule{0pt}{\skipInterval}#2$] (a) at (#2,0); 
+        \coordinate [label={center:$#3$},label=below:$\rule{0pt}{\skipInterval}#4$] (b) at (#4,0); 
+        \draw decorate[decoration={markings,mark=% actually add a mark
+      between positions 0 and 1 step 1mm
+      with
+      {
+\draw[color=\colorInterval] (-3pt,-3pt) -- (3pt,3pt);
+      }}] {(a)--(b)};
+}
+\newcommand{\IntervalL}[4]{%
+        \coordinate [label={center:$#1$},label=below:$\rule{0pt}{\skipInterval}#2$] (a) at (#2,0); 
+        \coordinate [label={center:$#3$},label=below:$\rule{0pt}{\skipInterval}#4$] (b) at (#4,0); 
+        \draw decorate[decoration={
+		markings,
+		mark=between positions 0 and 1 step 1mm
+      	with
+      	{
+		\draw[color=\colorInterval] (-3pt,3pt) -- (3pt,-3pt);
+      	}
+		}
+		] {(a)--(b)};
+}
+\newcommand{\IntervalLF}[4]{%
+        \coordinate [label={center:$#1$},label=below:$\rule{0pt}{\skipInterval}#2$] (a) at (#2,0); 
+        \coordinate [label={center:$#3$},label=below:$\rule{0pt}{\skipInterval}#4$] (b) at (#4,0); 
+   		\fill[pattern=north west lines,pattern color=\colorInterval](#2,-3pt)rectangle(#4,3pt);
+}
+\newcommand{\IntervalRF}[4]{%
+        \coordinate [label={center:$#1$},label=below:$\rule{0pt}{\skipInterval}#2$] (a) at (#2,0); 
+        \coordinate [label={center:$#3$},label=below:$\rule{0pt}{\skipInterval}#4$] (b) at (#4,0); 
+   		\fill[pattern=north east lines,pattern color=\colorInterval](#2,-3pt)rectangle(#4,3pt);
+}
+\def\pre{0}
+\def\next{2}
+\newcommand{\IntervalLR}[2]{
+\def\pre{#1}
+\def\next{#2}
+}
+\newcommand{\IntervalG}[4]{%
+        \coordinate [label={center:$#1$},label=below:$\rule{0pt}{\skipInterval}#2$] (a) at (\pre,0); 
+        \coordinate [label={center:$#3$},label=below:$\rule{0pt}{\skipInterval}#4$] (b) at (\next,0); 
+       \draw[color=\colorInterval] decorate[decoration={ticks,amplitude=3pt,segment length=1mm}] {(a)--(b)};
+}
+\newcommand{\IntervalGL}[4]{%
+        \coordinate [label={center:$#1$},label=below:$\rule{0pt}{\skipInterval}#2$] (a) at (\pre,0); 
+        \coordinate [label={center:$#3$},label=below:$\rule{0pt}{\skipInterval}#4$] (b) at (\next,0); 
+        \draw decorate[decoration={markings,mark=% actually add a mark
+      between positions 0 and 1 step 1mm
+      with
+      {
+\draw[color=\colorInterval] (-3pt,3pt) -- (3pt,-3pt);
+      }}] {(a)--(b)};
+}
+\newcommand{\IntervalGR}[4]{%
+        \coordinate [label={center:$#1$},label=below:$\rule{0pt}{\skipInterval}#2$] (a) at (\pre,0); 
+        \coordinate [label={center:$#3$},label=below:$\rule{0pt}{\skipInterval}#4$] (b) at (\next,0); 
+        \draw decorate[decoration={markings,mark=% actually add a mark
+      between positions 0 and 1 step 1mm
+      with
+      {
+\draw[color=\colorInterval] (-3pt,-3pt) -- (3pt,3pt);
+      }}] {(a)--(b)};
+}
+
+\newcommand{\IntervalGLF}[4]{%
+        \coordinate [label={center:$#1$},label=below:$\rule{0pt}{\skipInterval}#2$] (a) at (\pre,0); 
+        \coordinate [label={center:$#3$},label=below:$\rule{0pt}{\skipInterval}#4$] (b) at (\next,0); 
+        \fill[pattern=north west lines,pattern color=\colorInterval](\pre,-3pt)rectangle(\next,3pt);
+}
+\newcommand{\IntervalGRF}[4]{%
+        \coordinate [label={center:$#1$},label=below:$\rule{0pt}{\skipInterval}#2$] (a) at (\pre,0); 
+        \coordinate [label={center:$#3$},label=below:$\rule{0pt}{\skipInterval}#4$] (b) at (\next,0); 
+        \fill[pattern=north east lines,pattern color=\colorInterval](\pre,-3pt)rectangle(\next,3pt);
+}
+%Định nghĩa dots fill
+\newcommand{\dotlineEX}[1]{
+	\def\numlinedot{#1}
+	\par
+	\foreach \x in{1,...,\numlinedot}
+	{
+		\noindent\dotfill
+		\par
+	}
+}
+%Liệt kê danh sách đáp án
+\newsavebox{\mybox}
+\newcommand{\listans}
+{
+\renewenvironment{Solution}[1]
+{##1\hspace*{-4pt}}
+{\hspace*{-5pt}}
+}
+\newcommand{\rowans}
+{
+\renewenvironment{Solution}[1]
+{\begin{minipage}{0.1\textwidth-\fboxsep}\color{blue}##1.\color{violet}}
+{\end{minipage}}
+}
+%% End of file `ex_test.sty'.
